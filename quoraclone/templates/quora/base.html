@@ -1,0 +1,95 @@
+{% extends 'quora/bootstrap.html' %}
+{% load bootstrap5 %}
+{% block bootstrap5_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <h1>
+                    {% block title %}(no title){% endblock %}
+                </h1>
+            </div>
+            {% if user.is_authenticated %}
+                <div class="col-md-3">
+                    User: {{ user.first_name }}
+                    <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+                </div>
+            {% endif %}
+        </div>
+        {% if request.user.is_authenticated %}
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <h2 class="brand" style="color:navy">Quora</h2>
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-1 active"
+                                   aria-current="page"
+                                   href="{% url 'home' %}"
+                                   style="color:navy">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-2"
+                                   href="{% url 'create_question' %}"
+                                   style="color:navy">Ask Question</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        {% endif %}
+        {% autoescape off %}
+            {% bootstrap_messages %}
+        {% endautoescape %}
+        <div class="row">
+            {% if user.is_authenticated %}
+                <div class="col-md-3 justify-content-left">
+                    <div class="card p-1">
+                        <div class="d-flex align-items-left">
+                            {% comment %} <div class="image">
+                                    <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" class="rounded" width="155">
+                            </div> {% endcomment %}
+                            <div class="ml-4 w-100">
+                                <h4 class="mb-0 mt-0">{{ user.first_name }}&nbsp;{{ user.last_name }}</h4>
+                                <span>{{ user.last_login|date }} - {{ user.last_login|time }}</span>
+                                <div class="p-2 mt-2  justify-content-between rounded stats">
+                                    <div class="row bg-primary  text-white">
+                                        <span >Questions</span>
+                                        <span >{{ profile.questions }}</span>
+                                    </div>
+                                    <div class="row bg-info  text-white">
+                                        <span >Answers</span>
+                                        <span >{{ profile.answers }}</span>
+                                    </div>
+                                    {% comment %} <div class="row bg-warning  text-white">
+                                        <span >Votes</span>
+                                        <span >{{ v }}&nbsp;</span>
+                                    </div> {% endcomment %}
+                                    <div class="row bg-success  text-white">
+                                        <span >Points</span>
+                                        <span >{{ profile.points }}</span>
+                                    </div>
+                                </div>
+                                {% comment %} <div class="button mt-2 d-flex flex-row align-items-center">
+                                        <button class="btn btn-sm btn-outline-primary w-100">Chat</button>
+                                        <button class="btn btn-sm btn-primary w-100 ml-2">Follow</button>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="col-md-9">
+                {% block content %}(no content){% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'quora/base.html' %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+{% block title %}
+    Quora by Zeeshan
+{% endblock title %}
+{% block content %}
+    <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="h2">{{ question.question }}</div>
+                    {% bs_icon 'chat-left-dots' size='1em' %}
+                    {{ question.answers }} ,
+                    <span>{% bs_icon 'eye' size='1em' %} {{ question.views }}</span>
+                    <div class="text-muted">
+                        Asked by: <a href="{% url 'view_profile' id=question.user.id %}">{{ question.user.user.first_name }}</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    {% if question.answered > 0 %}
+                        <div data-toggle="tooltip" data-placement="top" title="Answered">{% bs_icon 'check' size='4em' color='green' %}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div style="margin: 0; text-indent: 2rem; text-align: justify">{{ question.description }}</div>
+            <hr/>
+            {% for answer in answers %}
+                <div class="card p-1">
+                    <div class="row">
+                        <div class="col-md-1 text-center">
+                            <p >
+                                <a href="{% url 'upvote' id=answer.id %}"
+                                   data-toggle="tooltip"
+                                   data-placement="top"
+                                   title="Vote Up">{% bs_icon 'arrow-up-square-fill' size='2em' %}</a>
+                                <br/>
+                                <span class="text-center" style="font-weight: bold;">{{ answer.votes }}</span>
+                                <br/>
+                                <a href="{% url 'downvote' id=answer.id %}"
+                                   data-toggle="tooltip"
+                                   data-placement="top"
+                                   title="Vote Down">{% bs_icon 'arrow-down-square-fill' size='2em' %}</a>
+                            </p>
+                            {% if answer.accepted > 0 %}
+                                {% if user == question.user.user %}
+                                    <a href="{% url "unaccept_as_answer" id=answer.id %}">{% bs_icon 'check' size='2.5em' color='green' %}</a>
+                                {% else %}
+                                    {% bs_icon 'check' size='2.5em' color='green' %}
+                                {% endif %}
+                            {% elif question.answered <= 0 %}
+                                {% if user == question.user.user %}
+                                    <a href="{% url "accept_as_answer" id=answer.id %}">{% bs_icon 'check' size='2.5em' color='gray' %}</a>
+                                {% else %}
+                                    {% bs_icon 'check' size='2.5em' color='gray' %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-11">
+                            <div style="margin: 0; text-align: justify">{{ answer.answer }}</div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <p class="text-muted">
+                        Answered by <a href="{% url 'view_profile' id=answer.user.id %}">{{ answer.user.user.first_name }}</a>
+                        on {{ answer.timestamp }}
+                    </p>
+                </div>
+                <hr/>
+            {% endfor %}
+        </div>
+        <div class="col-md-3">
+            <form role="form" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="{{ question.id }}"/>
+                {% bootstrap_form form %}
+                {% buttons submit='OK' reset="Cancel" %}{% endbuttons %}
+            </form>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends 'quora/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Edit Profile | {{ block.super }}{% endblock %}
+{% block content %}
+
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ user_form|crispy }}
+		{{ profile_form|crispy }}
+		<input type="submit" class="btn btn-primary mb-2" name="submit" value="Save Changes!">
+		<a class="btn btn-secondary mb-2" href="{% url 'quora:profilepage' username=user.username %}">Discard Changes!</a>
+	</form>
+
+{% endblock %}

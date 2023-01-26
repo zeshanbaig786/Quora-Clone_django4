@@ -1,0 +1,50 @@
+{% extends 'quora/base.html' %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+{% block title %}Quora by Zeeshan{% endblock %}
+{% block content %}
+    {% for question in questions %}
+        {% comment %} <div class="card">
+        <div class="card-body"> {% endcomment %}
+            {% comment %} <div class="p-3 mb-2 bg-primary text-white rounded">
+                    <a href="{% url 'view_profile' id=question.user.id %}" class="text-white">{{ question.user.user.first_name }} {{ question.user.user.last_name }}</a>
+            </div> {% endcomment %}
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="{% url 'question_detail' id=question.id %}"
+                           style="text-decoration: none;
+                                  color: black">{{ question.question }}</a>
+                        {% if question.answered %}
+                            {% bs_icon 'check' size='2em' color='green' %}
+                        {% endif %}
+                    </h4>
+                    <p class="card-text">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ question.description|truncatewords:50 }}&nbsp;
+                                <a href="{% url 'question_detail' id=question.id %}"
+                                   class="link link-info">View</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="container-fluid align-right">
+                            <span>
+                                {% bs_icon 'chat-left-dots' size='1em' %}&nbsp;{{ question.answers }} |
+                                {% bs_icon 'eye' size='1em' %}&nbsp;{{ question.views }} |
+                                {{ question.timestamp }} |
+                                Asked by
+                                <a href="{% url 'view_profile' id=question.user.id %}"
+                                   class="link link-info"
+                                   class="text-white">{{ question.user.user.first_name }} {{ question.user.user.last_name }}</a>
+                            </span>
+                        </div>
+                    </div>
+                    {% comment %} </div>
+                    </div> {% endcomment %}
+                </div>
+            </div>
+            <br/>
+        {% endfor %}
+    {% endblock %}

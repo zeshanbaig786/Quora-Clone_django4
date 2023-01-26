@@ -1,0 +1,20 @@
+{% extends 'quora/base.html' %}
+{% load bootstrap5 %}
+
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+
+    {% bootstrap_form_errors form type='non_fields' %}
+
+    {% bootstrap_form form layout=layout size=size %}
+
+
+    {% bootstrap_button button_type="submit" content="Login" %}
+    <a href="{% url 'register' %}">Register</a>
+</form>
+
+
+{% endblock %}
